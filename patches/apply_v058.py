@@ -12,7 +12,7 @@ def _csv_key(value: str) -> str:
 
 
 def parse_csv_feed(text: str, source: str) -> list[dict]:
-    """Parse common Google Merchant and Yandex universal CSV product feeds."""
+    # Parse common Google Merchant and Yandex universal CSV product feeds.
     try:
         dialect = csv.Sniffer().sniff(text[:8192], delimiters=",;\\t")
     except csv.Error:
