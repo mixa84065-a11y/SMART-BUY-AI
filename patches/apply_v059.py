@@ -75,18 +75,18 @@ p = Path("backend/app/config.py")
 s = p.read_text(encoding="utf-8")
 if "feed_registry_url:" not in s:
     s = s.replace(
-        '    public_feed_urls: str = ""  # source=https://...;source2=https://...\\n',
-        '    public_feed_urls: str = ""  # source=https://...;source2=https://...\\n'
-        '    feed_registry_url: str = ""  # optional remote catalog/feeds.json URL\\n')
+        '    public_feed_urls: str = ""  # source=https://...;source2=https://...\n',
+        '    public_feed_urls: str = ""  # source=https://...;source2=https://...\n'
+        '    feed_registry_url: str = ""  # optional remote catalog/feeds.json URL\n')
     p.write_text(s, encoding="utf-8")
 
 p = Path("backend/app/main.py")
 s = p.read_text(encoding="utf-8")
 if "from .feed_registry import load_remote_registry" not in s:
-    s = s.replace("from .discovery import configured_feeds, fetch_feed\\n",
-                  "from .discovery import configured_feeds, fetch_feed\\nfrom .feed_registry import load_remote_registry\\n")
+    s = s.replace("from .discovery import configured_feeds, fetch_feed\n",
+                  "from .discovery import configured_feeds, fetch_feed\nfrom .feed_registry import load_remote_registry\n")
 if "_feed_registry_cache:" not in s:
-    s = s.replace("FEED_ERROR_RETRY_SECONDS = 300\\n", '''FEED_ERROR_RETRY_SECONDS = 300
+    s = s.replace("FEED_ERROR_RETRY_SECONDS = 300\n", '''FEED_ERROR_RETRY_SECONDS = 300
 FEED_REGISTRY_TTL_SECONDS = 300
 _feed_registry_cache: tuple[float, list[tuple[str, str]], dict] | None = None
 
@@ -135,8 +135,8 @@ new = '''async def _refresh_configured_feeds(db: Session, force: bool = False):
 if old not in s:
     raise SystemExit("feed refresh insertion point not found")
 s = s.replace(old, new, 1)
-s = s.replace('    return {"configured": len(feeds), "imported": total, "results": results}\\n',
-              '    return {"configured": len(feeds), "imported": total, "results": results, "registry": registry_status}\\n', 1)
+s = s.replace('    return {"configured": len(feeds), "imported": total, "results": results}\n',
+              '    return {"configured": len(feeds), "imported": total, "results": results, "registry": registry_status}\n', 1)
 
 old = '''    feeds = configured_feeds(settings.public_feed_urls)
     if feeds:
