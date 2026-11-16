@@ -1,0 +1,32 @@
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /build
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY SMART_BUY_AI_v0_5_2_GitHub_Source_SAFE.zip /tmp/smartbuy-source.zip
+COPY patches/ /tmp/smartbuy-patches/
+RUN mkdir -p /app \
+    && unzip -q /tmp/smartbuy-source.zip -d /app \
+    && mkdir -p /app/patches \
+    && cp /tmp/smartbuy-patches/*.py /app/patches/ \
+    && cd /app \
+    && python patches/apply_v053.py \
+    && python patches/apply_v054.py \
+    && python patches/apply_v055.py \
+    && python patches/apply_v056.py \
+    && python patches/apply_v057.py \
+    && python patches/apply_v058.py \
+    && python patches/apply_v059.py \
+    && python patches/apply_v0510.py \
+    && rm -f /tmp/smartbuy-source.zip
+
+WORKDIR /app/backend
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 10000
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
