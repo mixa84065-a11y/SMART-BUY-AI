@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "version": "1.0.0",
+  "updated_at": "2026-11-17",
+  "market": "RU",
+  "currency": "RUB",
+  "categories": [
+    "Все",
+    "Электроника",
+    "Телефоны",
+    "Компьютеры",
+    "Бытовая техника",
+    "Дом",
+    "Мебель",
+    "Интерьер",
+    "Сад и ремонт",
+    "Одежда",
+    "Женская одежда",
+    "Мужская одежда",
+    "Обувь",
+    "Аксессуары",
+    "Детская одежда",
+    "Красота",
+    "Спорт",
+    "Детям",
+    "Игрушки",
+    "Авто",
+    "Продукты",
+    "Зоотовары",
+    "Книги",
+    "Канцтовары",
+    "Аптека"
+  ],
+  "stores": [
+    {
+      "name": "Wildberries",
+      "domain": "wildberries.ru",
+      "group": "Маркетплейсы"
+    },
+    {
+      "name": "Ozon",
+      "domain": "ozon.ru",
+      "group": "Маркетплейсы"
+    },
+    {
+      "name": "Яндекс Маркет",
+      "domain": "market.yandex.ru",
+      "group": "Маркетплейсы"
+    },
+    {
+      "name": "Мегамаркет",
+      "domain": "megamarket.ru",
+      "group": "Маркетплейсы"
+    },
+    {
+      "name": "Авито",
+      "domain": "avito.ru",
+      "group": "Маркетплейсы"
+    },
+    {
+      "name": "AliExpress",
+      "domain": "aliexpress.ru",
+      "group": "Международные площадки"
+    },
+    {
+      "name": "Alibaba",
+      "domain": "alibaba.com",
+      "group": "Международные площадки"
+    },
+    {
+      "name": "DNS",
+      "domain": "dns-shop.ru",
+      "group": "Электроника и техника"
+    },
+    {
+      "name": "Ситилинк",
+      "domain": "citilink.ru",
+      "group": "Электроника и техника"
+    },
+    {
+      "name": "М.Видео",
+      "domain": "mvideo.ru",
+      "group": "Электроника и техника"
+    },
+    {
+      "name": "Эльдорадо",
+      "domain": "eldorado.ru",
+      "group": "Электроника и техника"
+    },
+    {
+      "name": "Онлайнтрейд",
+      "domain": "onlinetrade.ru",
+      "group": "Электроника и техника"
+    },
+    {
+      "name": "Холодильник.ру",
+      "domain": "holodilnik.ru",
+      "group": "Электроника и техника"
+    },
+    {
+      "name": "Hoff",
+      "domain": "hoff.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Лемана ПРО",
+      "domain": "lemanapro.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Петрович",
+      "domain": "petrovich.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Максидом",
+      "domain": "maxidom.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "ВсеИнструменты.ру",
+      "domain": "vseinstrumenti.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Askona",
+      "domain": "askona.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "divan.ru",
+      "domain": "divan.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Столплит",
+      "domain": "stolplit.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Много мебели",
+      "domain": "mnogomebeli.com",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Твой Дом",
+      "domain": "tvoedom.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Kuchenland",
+      "domain": "kuchenland.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Ещё",
+      "domain": "eshe.club",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "Lamoda",
+      "domain": "lamoda.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Спортмастер",
+      "domain": "sportmaster.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Kari",
+      "domain": "kari.com",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Gloria Jeans",
+      "domain": "gloria-jeans.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "O'STIN",
+      "domain": "ostin.com",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Befree",
+      "domain": "befree.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Zarina",
+      "domain": "zarina.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Love Republic",
+      "domain": "loverepublic.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Henderson",
+      "domain": "henderson.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Rendez-Vous",
+      "domain": "rendez-vous.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Zolla",
+      "domain": "zolla.com",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "SELA",
+      "domain": "sela.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Finn Flare",
+      "domain": "finn-flare.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "BAON",
+      "domain": "baon.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Золотое Яблоко",
+      "domain": "goldapple.ru",
+      "group": "Красота и уход"
+    },
+    {
+      "name": "Лэтуаль",
+      "domain": "letu.ru",
+      "group": "Красота и уход"
+    },
+    {
+      "name": "Рив Гош",
+      "domain": "rivegauche.ru",
+      "group": "Красота и уход"
+    },
+    {
+      "name": "Читай-город",
+      "domain": "chitai-gorod.ru",
+      "group": "Книги и канцелярия"
+    },
+    {
+      "name": "Book24",
+      "domain": "book24.ru",
+      "group": "Книги и канцелярия"
+    },
+    {
+      "name": "Exist",
+      "domain": "exist.ru",
+      "group": "Авто и запчасти"
+    },
+    {
+      "name": "Автодок",
+      "domain": "autodoc.ru",
+      "group": "Авто и запчасти"
+    },
+    {
+      "name": "Petshop",
+      "domain": "petshop.ru",
+      "group": "Зоотовары"
+    },
+    {
+      "name": "Четыре Лапы",
+      "domain": "4lapy.ru",
+      "group": "Зоотовары"
+    },
+    {
+      "name": "Детский мир",
+      "domain": "detmir.ru",
+      "group": "Детям и игрушки"
+    },
+    {
+      "name": "Кораблик",
+      "domain": "korablik.ru",
+      "group": "Детям и игрушки"
+    },
+    {
+      "name": "Перекрёсток",
+      "domain": "perekrestok.ru",
+      "group": "Продукты и супермаркеты"
+    },
+    {
+      "name": "Пятёрочка",
+      "domain": "5ka.ru",
+      "group": "Продукты и супермаркеты"
+    },
+    {
+      "name": "Магнит",
+      "domain": "magnit.ru",
+      "group": "Продукты и супермаркеты"
+    },
+    {
+      "name": "Лента",
+      "domain": "lenta.com",
+      "group": "Продукты и супермаркеты"
+    },
+    {
+      "name": "Ашан",
+      "domain": "auchan.ru",
+      "group": "Продукты и супермаркеты"
+    },
+    {
+      "name": "METRO",
+      "domain": "online.metro-cc.ru",
+      "group": "Продукты и супермаркеты"
+    },
+    {
+      "name": "ВкусВилл",
+      "domain": "vkusvill.ru",
+      "group": "Продукты и супермаркеты"
+    },
+    {
+      "name": "Аптека.ру",
+      "domain": "apteka.ru",
+      "group": "Аптеки и здоровье"
+    },
+    {
+      "name": "ЕАПТЕКА",
+      "domain": "eapteka.ru",
+      "group": "Аптеки и здоровье"
+    },
+    {
+      "name": "Здравсити",
+      "domain": "zdravcity.ru",
+      "group": "Аптеки и здоровье"
+    }
+  ],
+  "products": [],
+  "notice": "Список магазинов и категорий. Наличие магазина в каталоге не означает подключение его цен, остатков или отзывов. Пустой products означает, что реальные товарные предложения не опубликованы."
+}
