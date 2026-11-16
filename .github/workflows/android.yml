@@ -13,6 +13,8 @@ jobs:
         run: |
           test -f SMART_BUY_AI_v0_5_2_GitHub_Source_SAFE.zip || (echo 'Upload SMART_BUY_AI_v0_5_2_GitHub_Source_SAFE.zip to the repository root first' && exit 1)
           unzip -oq SMART_BUY_AI_v0_5_2_GitHub_Source_SAFE.zip -d .
+      - name: Apply SMART BUY AI v0.5.3 updates
+        run: python patches/apply_v053.py
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -40,13 +42,13 @@ jobs:
         run: gradle assembleRelease
       - uses: actions/upload-artifact@v4
         with:
-          name: SMART-BUY-AI-v0.5.2-release
+          name: SMART-BUY-AI-v0.5.3-release
           path: app/build/outputs/apk/release/app-release.apk
 
       - name: Publish unpacked source for maintenance
         uses: actions/upload-artifact@v4
         with:
-          name: SMART-BUY-AI-source-v0.5.2
+          name: SMART-BUY-AI-source-v0.5.3
           path: |
             app/
             backend/
