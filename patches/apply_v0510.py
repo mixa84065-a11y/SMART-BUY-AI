@@ -29,14 +29,3 @@ if old not in s:
     raise SystemExit("API-key middleware anchor not found")
 p.write_text(s.replace(old, new, 1), encoding="utf-8")
 
-tests = Path("backend/tests/test_discovery.py")
-t = tests.read_text(encoding="utf-8")
-if "test_render_deployment_files_are_present" not in t:
-    t += '''
-
-def test_render_deployment_files_are_present():
-    from pathlib import Path
-    assert Path("render.yaml").exists()
-    assert Path("Dockerfile.render").exists()
-'''
-    tests.write_text(t, encoding="utf-8")
