@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: smart-buy-ai-api
+    runtime: docker
+    plan: 0.5c-512mb
+    region: frankfurt
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    disk:
+      name: smartbuy-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:////var/data/smartbuy.db
+      - key: FEED_REGISTRY_URL
+        value: https://raw.githubusercontent.com/mixa84065-a11y/SMART-BUY-AI/main/catalog/feeds.json
+      - key: API_KEY
+        generateValue: true
