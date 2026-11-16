@@ -45,3 +45,8 @@ Android-приложение для поиска товаров и сравне�
 - История цен и отзывы начнут накапливаться только после импорта реальных данных.
 - Рекламный блок и Premium-экран пока демонстрационные; рекламная сеть и Google Play Billing не подключены.
 - Совместимость подписи с ранее установленной APK-сборкой необходимо проверить на устройстве. После перехода на постоянный release-ключ последующие обновления будут использовать тот же ключ.
+
+
+## SMART BUY AI v0.5.6
+
+The Android build now applies the v0.5.6 structured YML importer patch. It resolves category IDs, imports delivery costs and seller labels, and keeps declared wholesale minimum-order offers separate from retail comparisons. Live product prices still require explicitly approved public feed URLs configured on the backend; store directory entries alone are not live price integrations.
