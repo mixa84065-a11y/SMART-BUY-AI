@@ -21,6 +21,8 @@ jobs:
         run: python patches/apply_v055.py
       - name: Apply SMART BUY AI v0.5.6 YML importer improvements
         run: python patches/apply_v056.py
+      - name: Apply SMART BUY AI v0.5.7 feed refresh reliability
+        run: python patches/apply_v057.py
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -48,13 +50,13 @@ jobs:
         run: gradle assembleRelease
       - uses: actions/upload-artifact@v4
         with:
-          name: SMART-BUY-AI-v0.5.6-release
+          name: SMART-BUY-AI-v0.5.7-release
           path: app/build/outputs/apk/release/app-release.apk
 
       - name: Publish unpacked source for maintenance
         uses: actions/upload-artifact@v4
         with:
-          name: SMART-BUY-AI-source-v0.5.6
+          name: SMART-BUY-AI-source-v0.5.7
           path: |
             app/
             backend/
