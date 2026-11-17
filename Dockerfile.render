@@ -31,6 +31,7 @@ RUN mkdir -p /app \
     && python patches/apply_v0518.py \
     && python patches/apply_v0519.py \
     && python patches/apply_v0520.py \
+    && python patches/apply_v0521.py \
     && rm -f /tmp/smartbuy-source.zip
 
 WORKDIR /app/backend
