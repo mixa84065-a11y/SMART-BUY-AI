@@ -17,11 +17,47 @@ import json
 import os
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlparse
-from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen, HTTPRedirectHandler, build_opener
 
 from fastapi import APIRouter, HTTPException, Query
 
 router = APIRouter(prefix="/v1/integrations/yandex", tags=["integrations"])
+
+
+class _MarketRedirectHandler(HTTPRedirectHandler):
+    """Follow short links only while every redirect stays on Yandex Market."""
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        target = urlparse(newurl)
+        if target.scheme != "https" or target.hostname not in {
+            "market.yandex.ru", "www.market.yandex.ru"
+        } or target.username or target.password:
+            raise HTTPError(newurl, code, "Redirect left Yandex Market", headers, fp)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def _resolve_market_url(url: str) -> str:
+    parsed = urlparse(url)
+    if parsed.scheme != "https" or parsed.hostname not in {
+        "market.yandex.ru", "www.market.yandex.ru"
+    } or parsed.username or parsed.password:
+        raise HTTPException(status_code=400, detail="Укажите HTTPS-ссылку market.yandex.ru.")
+    request = Request(url, headers={"User-Agent": "SMART-BUY-AI/1.0", "Accept": "text/html"}, method="GET")
+    try:
+        opener = build_opener(_MarketRedirectHandler())
+        with opener.open(request, timeout=12) as response:
+            final_url = response.geturl()
+            final = urlparse(final_url)
+            if final.scheme != "https" or final.hostname not in {
+                "market.yandex.ru", "www.market.yandex.ru"
+            }:
+                raise HTTPException(status_code=400, detail="Ссылка перенаправляет за пределы Яндекс Маркета.")
+            return final_url
+    except HTTPException:
+        raise
+    except HTTPError as exc:
+        raise HTTPException(status_code=502, detail=f"Не удалось раскрыть короткую ссылку Яндекс Маркета (HTTP {exc.code}).")
+    except (URLError, TimeoutError) as exc:
+        raise HTTPException(status_code=502, detail="Яндекс Маркет не раскрыл короткую ссылку. Попробуйте позже или отправьте полную ссылку на карточку.")
 
 
 def _config():
@@ -72,17 +108,10 @@ def create_yandex_referral_link(
     if not place_id:
         raise HTTPException(status_code=503, detail="Не задан YANDEX_MARKET_PLACE_ID в Render.")
 
-    parsed = urlparse(url)
-    if parsed.scheme != "https" or parsed.hostname not in {
-        "market.yandex.ru", "www.market.yandex.ru"
-    } or parsed.username or parsed.password:
-        raise HTTPException(
-            status_code=400,
-            detail="Укажите HTTPS-ссылку на товар или страницу market.yandex.ru."
-        )
+    resolved_url = _resolve_market_url(url)
 
     endpoint = "https://api.content.market.yandex.ru/v3/affiliate/partner/link/create"
-    query = urlencode({"url": url, "place_id": place_id, "format": "json"})
+    query = urlencode({"url": resolved_url, "place_id": place_id, "format": "json"})
     request = Request(
         endpoint + "?" + query,
         headers={
