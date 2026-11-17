@@ -7,7 +7,7 @@ if not APP_FILE.is_file():
 
 source = APP_FILE.read_text(encoding="utf-8")
 if "from fastapi.responses import HTMLResponse" not in source:
-    source = "from fastapi.responses import HTMLResponse\\n" + source
+    source = "from fastapi.responses import HTMLResponse\n" + source
 
 if '@app.get("/",' not in source:
     html = """<!doctype html>
@@ -40,7 +40,7 @@ a{color:var(--gold)}footer{margin-top:30px;color:var(--muted);font-size:13px}
 <section><h2>О приложении</h2><p>Платформа: Android. Назначение: поиск товаров, каталог магазинов и сравнение торговых предложений. Название: SMART BUY AI.</p><p style="margin-top:12px"><a href="https://github.com/mixa84065-a11y/SMART-BUY-AI">Репозиторий проекта и информация о разработке</a></p></section>
 <footer>© SMART BUY AI. Информация описывает назначение и текущую стадию развития сервиса.</footer>
 </main></body></html>"""
-    route = "\\n\\n@app.get(\"/\", response_class=HTMLResponse, include_in_schema=False)\\ndef smart_buy_public_site():\\n    return HTMLResponse(content=" + repr(html) + ")\\n"
+    route = "\n\n@app.get(\"/\", response_class=HTMLResponse, include_in_schema=False)\ndef smart_buy_public_site():\n    return HTMLResponse(content=" + repr(html) + ")\n"
     source = source.rstrip() + route
 
 APP_FILE.write_text(source, encoding="utf-8")
