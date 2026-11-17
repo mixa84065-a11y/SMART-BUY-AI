@@ -56,6 +56,8 @@ s = s.replace(
 if "void searchPlatiCatalog(" not in s:
     insert_at = s.index("    void loadMatchingCandidates(")
     methods = r'''    void searchPlatiCatalog(String q,String server){
+        android.view.View loading=note("Ищем товары на Plati.Market…","Загружаем каталог. Это может занять некоторое время при первом обращении.");
+        content.addView(loading);
         new Thread(()->{
             HttpURLConnection connection=null;
             try{
@@ -70,6 +72,7 @@ if "void searchPlatiCatalog(" not in s:
                 if(code<200||code>=300)throw new Exception("HTTP "+code);
                 JSONObject data=new JSONObject(buffer.toString("UTF-8"));JSONArray items=data.optJSONArray("products");
                 runOnUiThread(()->{
+                    content.removeView(loading);
                     content.addView(section("Plati.Market — цифровые товары"));
                     if(items==null||items.length()==0){
                         content.addView(note("Поиск Plati.Market", "По этому запросу предложений не найдено. Попробуй уточнить название."));
@@ -84,6 +87,7 @@ if "void searchPlatiCatalog(" not in s:
                 });
             }catch(Exception ex){
                 runOnUiThread(()->{
+                    content.removeView(loading);
                     content.addView(section("Plati.Market"));
                     content.addView(note("Источник временно недоступен", "Обычный поиск и открытие магазинов остаются доступны. Повтори запрос позже."));
                 });
@@ -162,7 +166,7 @@ main.write_text(s, encoding="utf-8")
 
 gradle = Path("app/build.gradle")
 g = gradle.read_text(encoding="utf-8")
-g = re.sub(r"versionCode\s+21", "versionCode 22", g, count=1)
-g = re.sub(r"versionName\s+'0\.6\.1'", "versionName '0.6.2'", g, count=1)
+g = re.sub(r"versionCode\s+22", "versionCode 23", g, count=1)
+g = re.sub(r"versionName '0.6.2'", "versionName '0.6.2'", g, count=1)
 gradle.write_text(g, encoding="utf-8")
 print("Added live Plati.Market search cards to Android app; package ID and signing config preserved.")
