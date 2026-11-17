@@ -12,7 +12,7 @@ if "from fastapi.responses import HTMLResponse" not in source:
 
 marker = '@app.get("/",'
 if marker not in source:
-    route = r"""
+    route = r'''
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 def smart_buy_public_site():
