@@ -6,6 +6,7 @@ import asyncio
 import json
 import os
 import re
+import time
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 import httpx
@@ -13,6 +14,8 @@ from fastapi import APIRouter, HTTPException, Query
 
 router = APIRouter(prefix="/v1/integrations/plati", tags=["integrations"])
 MCP_URL = "https://mcp.plati.market/mcp"
+_SEARCH_CACHE = {}
+_SEARCH_CACHE_TTL = 90
 ALLOWED_HOSTS = {"plati.market", "www.plati.market"}
 
 
@@ -148,6 +151,11 @@ async def plati_search(
     page: int = Query(1, ge=1, le=1000),
     page_size: int = Query(10, ge=1, le=50),
 ):
+    cache_key = (q.strip().casefold(), page, page_size)
+    cached = _SEARCH_CACHE.get(cache_key)
+    now = time.monotonic()
+    if cached and now - cached[0] < _SEARCH_CACHE_TTL:
+        return cached[1]
     timeout = httpx.Timeout(25.0, connect=8.0)
     try:
         async with httpx.AsyncClient(
@@ -164,50 +172,37 @@ async def plati_search(
             rows = data.get("products", []) if isinstance(data, dict) else []
             if not isinstance(rows, list):
                 rows = []
-            semaphore = asyncio.Semaphore(4)
-            detail_rows = await asyncio.gather(*[
-                _detail(client, row.get("id"), semaphore)
-                for row in rows[:min(len(rows), 12)]
-                if isinstance(row, dict) and row.get("id") is not None
-            ])
     except httpx.HTTPStatusError as exc:
         raise HTTPException(status_code=502, detail=f"Plati.Market вернул HTTP {exc.response.status_code}.")
     except (httpx.HTTPError, ValueError) as exc:
         raise HTTPException(status_code=502, detail=f"Не удалось получить каталог Plati.Market: {str(exc)[:180]}")
 
-    details = iter(detail_rows)
     products = []
     for row in rows:
         if not isinstance(row, dict) or row.get("id") is None:
             continue
-        detail_response = next(details, {})
-        detail = detail_response.get("product", detail_response) if isinstance(detail_response, dict) else {}
-        seller = detail_response.get("seller", {}) if isinstance(detail_response, dict) else {}
         raw_url = _safe_product_url(row.get("url")) or f"https://plati.market/itm/{row['id']}"
         url = _affiliate_url(raw_url)
         price = row.get("price") if isinstance(row.get("price"), dict) else {}
-        title = row.get("name") or detail.get("name") or "Товар Plati.Market"
-        description = row.get("description") or detail.get("description") or detail.get("additionalInfo")
+        title = row.get("name") or "Товар Plati.Market"
+        description = row.get("description") or ""
+        seller = row.get("seller") if isinstance(row.get("seller"), dict) else {}
         products.append({
             "id": str(row.get("id")),
             "title": str(title)[:300],
-            "description": str(description or "")[:1200],
-            "price": _price_rub(price) or _price_rub(detail.get("price")),
+            "description": str(description)[:1200],
+            "price": _price_rub(price),
             "currency": "RUB",
             "image": f"https://graph.digiseller.ru/img.ashx?id_d={row['id']}&maxlength=400",
             "url": url,
             "affiliate_link": url if _partner_id() else None,
-            "seller": {
-                "id": (seller.get("id") if isinstance(seller, dict) else None)
-                       or (row.get("seller", {}).get("id") if isinstance(row.get("seller"), dict) else None),
-                "name": seller.get("name") if isinstance(seller, dict) else None,
-            },
-            "sold": row.get("sold") or (detail.get("statistics", {}) or {}).get("sold"),
+            "seller": {"id": seller.get("id"), "name": seller.get("name")},
+            "sold": row.get("sold"),
             "rating": None,
             "source": "Plati.Market",
             "live_data": True,
         })
-    return {
+    result = {
         "provider": "plati_market",
         "query": q,
         "page": page,
@@ -218,6 +213,10 @@ async def plati_search(
         "products": products,
         "notice": "Актуальные данные публичного каталога Plati.Market. Цена и наличие могут измениться на странице продавца.",
     }
+    if len(_SEARCH_CACHE) > 200:
+        _SEARCH_CACHE.clear()
+    _SEARCH_CACHE[cache_key] = (time.monotonic(), result)
+    return result
 '''
 (root / "plati_affiliate.py").write_text(module, encoding="utf-8")
 print("Installed public Plati.Market MCP catalogue adapter.")
