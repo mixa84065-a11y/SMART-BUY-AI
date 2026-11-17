@@ -3,6 +3,7 @@ from pathlib import Path
 registry_module = '''"""Remote registry for explicitly approved public merchant feeds."""
 from __future__ import annotations
 import json
+import os
 import re
 from urllib.parse import urlparse
 import httpx
@@ -95,7 +96,7 @@ async def _configured_feeds():
     """Merge environment feeds with active entries in the remote JSON registry."""
     global _feed_registry_cache
     feeds = configured_feeds(settings.public_feed_urls)
-    registry_url = settings.feed_registry_url.strip()
+    registry_url = os.getenv("FEED_REGISTRY_URL", "").strip() or getattr(settings, "feed_registry_url", "").strip()
     if not registry_url:
         return feeds, {"status": "not_configured", "note": "Удалённый реестр фидов не настроен"}
     now = time.monotonic()
