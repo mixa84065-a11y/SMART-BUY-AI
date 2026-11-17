@@ -95,7 +95,7 @@ home=r"""    void home(){
         TextView star=txt("⭐",32,GOLD,true);smart.addView(star);
         LinearLayout smartText=new LinearLayout(this);smartText.setOrientation(1);smartText.setPadding(dp(10),0,0,0);
         smartText.addView(txt("Умный поиск и сравнение",15,Color.WHITE,true));
-        smartText.addView(txt("Найдём лучшие предложения\\nво всех магазинах",11,0xFFE4D9FF,false));
+        smartText.addView(txt("Найдём лучшие предложения во всех магазинах",11,0xFFE4D9FF,false));
         smart.addView(smartText,new LinearLayout.LayoutParams(0,-2,1));smart.addView(txt("›",30,Color.WHITE,true));
         LinearLayout.LayoutParams smartLp=new LinearLayout.LayoutParams(-1,-2);smartLp.setMargins(0,dp(10),0,dp(8));content.addView(smart,smartLp);
         smart.setOnClickListener(v->{search.setText("");search.requestFocus();((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(search,InputMethodManager.SHOW_IMPLICIT);});
@@ -112,14 +112,14 @@ home=r"""    void home(){
         }
         popScroll.addView(popular);content.addView(popScroll);
         content.addView(section("Преимущества"));
-        LinearLayout advantages=new LinearLayout(this);String[] advIcons={"🛡","⚖","★","ϟ"};String[] adv={"Проверенные\\nмагазины","Полное\\nсравнение","Реальные\\nотзывы","Выгодные\\nцены"};
+        LinearLayout advantages=new LinearLayout(this);String[] advIcons={"🛡","⚖","★","ϟ"};String[] adv={"Проверенные магазины","Полное сравнение","Реальные отзывы","Выгодные цены"};
         for(int i=0;i<adv.length;i++){LinearLayout a=new LinearLayout(this);a.setOrientation(1);a.setGravity(Gravity.CENTER);a.setPadding(dp(4),dp(10),dp(4),dp(10));a.setBackground(round(0xFF19183D,15));a.addView(txt(advIcons[i],23,i==3?GOLD:0xFFD1B9FF,true));TextView t=txt(adv[i],9,TEXT,true);t.setGravity(Gravity.CENTER);a.addView(t);LinearLayout.LayoutParams ap=new LinearLayout.LayoutParams(0,dp(92),1);ap.setMargins(dp(2),dp(4),dp(2),dp(4));advantages.addView(a,ap);}
         content.addView(advantages);
         LinearLayout promo=new LinearLayout(this);promo.setGravity(Gravity.CENTER_VERTICAL);promo.setPadding(dp(12),dp(12),dp(12),dp(12));
         GradientDrawable promoBg=new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,new int[]{0xFF2115A4,0xFF4E0BC4,0xFF7419D8});promoBg.setCornerRadius(dp(20));promo.setBackground(promoBg);
         promo.addView(txt("🤖",54,Color.WHITE,true));
         LinearLayout promoText=new LinearLayout(this);promoText.setOrientation(1);promoText.setPadding(dp(8),0,0,0);
-        promoText.addView(txt("SMART BUY AI",16,GOLD,true));promoText.addView(txt("Найди лучшую цену\\nс ИИ!",13,Color.WHITE,true));
+        promoText.addView(txt("SMART BUY AI",16,GOLD,true));promoText.addView(txt("Найди лучшую цену с ИИ!",13,Color.WHITE,true));
         TextView start=txt("Начать поиск  →",11,Color.WHITE,true);start.setGravity(Gravity.CENTER);start.setPadding(dp(10),dp(7),dp(10),dp(7));start.setBackground(round(0xFF8A2BFF,18));promoText.addView(start);
         promo.addView(promoText,new LinearLayout.LayoutParams(0,-2,1));LinearLayout.LayoutParams promoLp=new LinearLayout.LayoutParams(-1,-2);promoLp.setMargins(0,dp(13),0,dp(14));content.addView(promo,promoLp);
         promo.setOnClickListener(v->{search.requestFocus();((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(search,InputMethodManager.SHOW_IMPLICIT);});
