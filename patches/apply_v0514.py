@@ -60,7 +60,7 @@ nav="""    void buildNav(){
 """
 s=s[:start]+nav+s[end:]
 
-home="""    void home(){
+home=r"""    void home(){
         activeNav="Главная";buildNav();content.removeAllViews();
         LinearLayout searchBox=new LinearLayout(this);searchBox.setGravity(Gravity.CENTER_VERTICAL);
         searchBox.setPadding(dp(13),0,dp(12),0);searchBox.setBackground(round(0xFF201A4A,20));
