@@ -31,6 +31,8 @@ jobs:
         run: python patches/apply_v0510.py
       - name: Apply SMART BUY AI v0.5.11 PostgreSQL support
         run: python patches/apply_v0511.py
+      - name: Apply SMART BUY AI v0.6.0 purple mockup redesign
+        run: python patches/apply_v0514.py
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -60,13 +62,13 @@ jobs:
         run: gradle assembleRelease
       - uses: actions/upload-artifact@v4
         with:
-          name: SMART-BUY-AI-v0.5.9-release
+          name: SMART-BUY-AI-v0.6.0-release
           path: app/build/outputs/apk/release/app-release.apk
 
       - name: Publish unpacked source for maintenance
         uses: actions/upload-artifact@v4
         with:
-          name: SMART-BUY-AI-source-v0.5.9
+          name: SMART-BUY-AI-source-v0.6.0
           path: |
             app/
             backend/
