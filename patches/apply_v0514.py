@@ -6,7 +6,7 @@ s = p.read_text(encoding="utf-8")
 
 def replace_method(name, next_name, body):
     global s
-    pattern = rf"    void {name}\(\)\s*\{{.*?(?=    void {next_name}\()"
+    pattern = rf"    void {name}\([^)]*\)\s*\{{.*?(?=    void {next_name}\()"
     s2, n = re.subn(pattern, body + "\n", s, count=1, flags=re.S)
     if n != 1:
         raise SystemExit(f"Could not replace method {name}: {n}")
