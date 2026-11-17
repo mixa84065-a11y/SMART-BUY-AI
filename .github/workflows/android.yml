@@ -35,7 +35,7 @@ jobs:
         run: python patches/apply_v0514.py
       - name: Apply SMART BUY AI v0.6.1 launcher icon and version update
         run: python patches/apply_v0515.py
-      - name: Apply SMART BUY AI v0.6.2 live Plati catalogue search
+      - name: Apply SMART BUY AI v0.6.3 live Plati catalogue search
         run: python patches/apply_v0522.py
       - uses: actions/setup-python@v5
         with:
@@ -66,13 +66,13 @@ jobs:
         run: gradle assembleRelease
       - uses: actions/upload-artifact@v4
         with:
-          name: SMART-BUY-AI-v0.6.2-release
+          name: SMART-BUY-AI-v0.6.3-release
           path: app/build/outputs/apk/release/app-release.apk
 
       - name: Publish unpacked source for maintenance
         uses: actions/upload-artifact@v4
         with:
-          name: SMART-BUY-AI-source-v0.6.2
+          name: SMART-BUY-AI-source-v0.6.3
           path: |
             app/
             backend/
