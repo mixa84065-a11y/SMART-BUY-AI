@@ -1,21 +1,26 @@
 # Plati / Digiseller integration
 
-The backend read-only search adapter is installed by `patches/apply_v0519.py` and exposes:
+The backend adapter is installed by `patches/apply_v0519.py` and exposes:
 
 - `GET /v1/integrations/plati/status`
-- `GET /v1/integrations/plati/search?q=steam&page=1&page_size=20`
+- `GET /v1/integrations/plati/search?q=steam&page=1&page_size=10`
 
-It calls the documented Plati affiliate search endpoint with a minimum three-character query, normalizes available title/description/price/image/seller fields, and appends the affiliate parameter `ai` to product URLs. It does not perform purchases, payments, seller edits, or checkout.
+The search implementation follows the official Digiseller API:
+- Search: `POST https://shop.digiseller.ru/xml/shop_search.asp` with XML body, Russian language and RUB currency.
+- Product metadata: `GET https://api.digiseller.com/api/products/{product_id}/data?currency=RUB&lang=ru-RU`.
+- Main product image fallback: `https://graph.digiseller.ru/img.ashx?id_d={product_id}&maxlength=400`.
+- Product URLs are accepted only from approved Plati hostnames. The partner parameter `ai` is appended only when a valid partner identifier is configured.
 
-## Required configuration
+## Configuration
 
-Set Render environment variable `PLATI_PARTNER_ID` to the partner identifier from the Digiseller/Plati affiliate account. Do not put it in the Android APK or public repository. The integration status remains `awaiting_partner_id` until this is configured.
+The product catalog search does not require a partner identifier. For tracked affiliate links, set Render environment variable `PLATI_PARTNER_ID` to the partner identifier from the Digiseller/Plati affiliate account. Do not put it in the Android APK or public repository.
 
-Register for the affiliate program and obtain the identifier through the official partner instructions: https://plati.digital/partners/link/
+Register for the affiliate program and obtain the identifier through the official instructions: https://plati.digital/partners/link/
 
-## Important scope and data quality
+## Scope and data quality
 
-- This is a digital-goods catalog source, not a general source for clothing, home goods, electronics, or all SMART BUY AI categories.
-- The official API documentation lists search, product descriptions, images, reviews, seller information, prices and discounts. Only fields actually returned by a specific response are displayed.
-- Search results must be tested against the live API after the partner ID is configured. If Plati changes the response schema or blocks a request, the backend returns an upstream error instead of inventing product data.
-- Before enabling public display, review Plati's current affiliate/API terms and the requirements for showing its catalog and affiliate links.
+- This source covers digital goods listed on Plati/Digiseller. It is not a general source for clothing, home goods, electronics, or all SMART BUY AI categories.
+- Search responses supply product ID, name, price and partner commission. Product details are fetched separately to obtain the product URL and metadata. Missing fields remain null; they are never fabricated.
+- The adapter is read-only. It does not perform purchases, payments, seller edits, or checkout.
+- The endpoint must be smoke-tested against the live upstream service before being advertised as fully operational. If the upstream API rejects a request or changes its schema, the backend returns an upstream error rather than inventing product data.
+- Review current affiliate/API terms before public display. Partner link format is `?ai=XXXXX` (or `&ai=XXXXX` when the URL already has a query string).
