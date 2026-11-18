@@ -55,7 +55,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Restore permanent signing key
         env:
-          SMARTBUY_KEYSTORE_BASE64: \${{ secrets.SMARTBUY_KEYSTORE_BASE64 }}
+          SMARTBUY_KEYSTORE_BASE64: ${{ secrets.SMARTBUY_KEYSTORE_BASE64 }}
+          SMARTBUY_KEYSTORE_PASSWORD: ${{ secrets.SMARTBUY_KEYSTORE_PASSWORD }}
         run: |
           python - <<'PY'
           import base64, os, re
@@ -74,10 +75,10 @@ jobs:
           keytool -list -keystore "$RUNNER_TEMP/smartbuy-release.jks" -storepass "$SMARTBUY_KEYSTORE_PASSWORD" >/dev/null
       - name: Build signed release APK
         env:
-          SMARTBUY_KEYSTORE_PATH: \${{ runner.temp }}/smartbuy-release.jks
-          SMARTBUY_KEYSTORE_PASSWORD: \${{ secrets.SMARTBUY_KEYSTORE_PASSWORD }}
-          SMARTBUY_KEY_ALIAS: \${{ secrets.SMARTBUY_KEY_ALIAS }}
-          SMARTBUY_KEY_PASSWORD: \${{ secrets.SMARTBUY_KEY_PASSWORD }}
+          SMARTBUY_KEYSTORE_PATH: ${{ runner.temp }}/smartbuy-release.jks
+          SMARTBUY_KEYSTORE_PASSWORD: ${{ secrets.SMARTBUY_KEYSTORE_PASSWORD }}
+          SMARTBUY_KEY_ALIAS: ${{ secrets.SMARTBUY_KEY_ALIAS }}
+          SMARTBUY_KEY_PASSWORD: ${{ secrets.SMARTBUY_KEY_PASSWORD }}
         run: gradle assembleRelease
       - uses: actions/upload-artifact@v4
         with:
