@@ -132,3 +132,29 @@ async def smartbuy_feed_import_status():
     main.write_text(source, encoding="utf-8")
 
 print("Added opt-in startup execution and a safe import-status endpoint for the existing feed importer.")
+
+
+# SMART_BUY_AI_IMPORT_DIAGNOSTICS
+# Emit a safe, token-free startup summary after the importer hook has run.
+main = Path("backend/app/main.py")
+source = main.read_text(encoding="utf-8")
+diagnostic_marker = "# SMART_BUY_AI_IMPORT_DIAGNOSTICS"
+if diagnostic_marker not in source:
+    source += r'''
+
+# SMART_BUY_AI_IMPORT_DIAGNOSTICS
+@app.on_event("startup")
+async def _smartbuy_log_import_diagnostics():
+    import logging as _smartbuy_diag_logging
+    import os as _smartbuy_diag_os
+    logger = _smartbuy_diag_logging.getLogger("smartbuy.feed_import")
+    enabled = _smartbuy_diag_os.getenv("PAMPADU_AUTO_IMPORT_ON_STARTUP", "false").strip().lower() == "true"
+    state = globals().get("_SMARTBUY_FEED_IMPORT_STATE", {})
+    refresh = globals().get("_refresh_configured_feeds")
+    logger.info(
+        "SMART BUY AI import diagnostics: enabled=%s importer_found=%s state=%s detail=%s",
+        enabled, callable(refresh), state.get("status", "missing"), str(state.get("detail", ""))[:500]
+    )
+'''
+    main.write_text(source, encoding="utf-8")
+print("Added token-free startup diagnostics for the Pampadu importer.")
