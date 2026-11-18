@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "version": "1.1.0",
-  "updated_at": "2026-11-17",
+  "version": "1.1.1",
+  "updated_at": "2026-11-18",
   "market": "RU",
   "currency": "RUB",
   "categories": [
@@ -38,7 +38,9 @@
     "Мужская обувь",
     "Женская обувь",
     "Спортивные товары",
-    "Сад и огород"
+    "Сад и огород",
+    "Ювелирные изделия",
+    "Шины и диски"
   ],
   "stores": [
     {
@@ -420,6 +422,31 @@
       "name": "Joom",
       "domain": "joom.ru",
       "group": "Международные площадки"
+    },
+    {
+      "name": "Cozy Home",
+      "domain": "cozyhome.ru",
+      "group": "Дом, мебель и ремонт"
+    },
+    {
+      "name": "ADAMAS",
+      "domain": "adamas.ru",
+      "group": "Ювелирные украшения"
+    },
+    {
+      "name": "Dogeat",
+      "domain": "dogeat.ru",
+      "group": "Зоотовары"
+    },
+    {
+      "name": "EKONIKA",
+      "domain": "ekonika.ru",
+      "group": "Одежда, обувь и аксессуары"
+    },
+    {
+      "name": "Колесо",
+      "domain": "koleso-russia.ru",
+      "group": "Авто и запчасти"
     }
   ],
   "products": [],
