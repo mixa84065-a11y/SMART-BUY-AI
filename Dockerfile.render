@@ -33,6 +33,7 @@ RUN mkdir -p /app \
     && python patches/apply_v0520.py \
     && python patches/apply_v0521.py \
     && python patches/apply_v0523.py \
+    && python patches/apply_v0524.py \
     && python patches/apply_v060.py \
     && rm -f /tmp/smartbuy-source.zip
 
