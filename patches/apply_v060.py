@@ -173,11 +173,12 @@ _SMARTBUY_IMPORT_TASK = None
 async def _smartbuy_pampadu_startup_import():
     import asyncio as _smartbuy_asyncio
     import os as _smartbuy_background_os
+    import logging as _smartbuy_background_logging
     global _SMARTBUY_IMPORT_TASK
     if _smartbuy_background_os.getenv("PAMPADU_AUTO_IMPORT_ON_STARTUP", "false").strip().lower() != "true":
         return
     _SMARTBUY_IMPORT_TASK = _smartbuy_asyncio.create_task(_smartbuy_pampadu_import_worker())
-    logging.getLogger("smartbuy.feed_import").info("SMART BUY AI Pampadu import queued in background.")
+    _smartbuy_background_logging.getLogger("smartbuy.feed_import").info("SMART BUY AI Pampadu import queued in background.")
 """
     main.write_text(source, encoding="utf-8")
 print("Moved Pampadu import out of blocking startup and added a 55-second async timeout.")
