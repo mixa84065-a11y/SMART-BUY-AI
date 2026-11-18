@@ -48,7 +48,8 @@ print("Connected authorized Pampadu exports to the existing public-feed importer
 # This avoids depending on an operator-only POST endpoint for the first catalogue fill.
 main = Path("backend/app/main.py")
 source = main.read_text(encoding="utf-8")
-if marker not in source:
+startup_marker = "# SMART_BUY_AI_PAMPADU_STARTUP_IMPORT"
+if startup_marker not in source:
     source += r'''
 
 # SMART_BUY_AI_PAMPADU_STARTUP_IMPORT
