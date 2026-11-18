@@ -62,7 +62,7 @@ jobs:
           raw = os.environ["SMARTBUY_KEYSTORE_BASE64"].strip()
           if raw.startswith("data:") and "," in raw:
               raw = raw.split(",", 1)[1]
-          raw = re.sub(r"\\s+", "", raw).replace("-", "+").replace("_", "/")
+          raw = re.sub(r"\s+", "", raw).replace("-", "+").replace("_", "/")
           raw = re.sub(r"[^A-Za-z0-9+/=]", "", raw)
           raw += "=" * (-len(raw) % 4)
           data = base64.b64decode(raw, validate=True)
