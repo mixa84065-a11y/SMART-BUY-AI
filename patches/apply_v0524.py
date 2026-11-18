@@ -87,3 +87,36 @@ p.write_text(s,encoding='utf-8')
 
 g=Path('app/build.gradle');s=g.read_text(encoding='utf-8');s=re.sub(r'versionCode\s+\d+', 'versionCode 24', s, count=1);s=re.sub(r"versionName\s+'[^']+'", "versionName '0.6.4'", s, count=1);g.write_text(s,encoding='utf-8')
 print('SMART BUY AI 0.6.4: product photos persisted from YML/CSV feeds; single-store single price; multi-store price comparison; full product card for every category.')
+
+
+# Local demo cards are never presented as a three-store comparison.
+java = Path('app/src/main/java/com/smartbuy/ai/MainActivity.java')
+s = java.read_text(encoding='utf-8')
+start = s.index('    void productCard(Product p){')
+end = s.index('    void detail(Product p){', start)
+card = '''    void productCard(Product p){
+        LinearLayout card=new LinearLayout(this);card.setOrientation(1);card.setPadding(dp(12),dp(12),dp(12),dp(12));
+        GradientDrawable cardBg=round(0xFF12152E,19);cardBg.setStroke(dp(1),0xFF39305F);card.setBackground(cardBg);
+        LinearLayout.LayoutParams cp=new LinearLayout.LayoutParams(-1,-2);cp.setMargins(0,dp(7),0,dp(7));content.addView(card,cp);
+        LinearLayout top=new LinearLayout(this);top.setGravity(Gravity.CENTER_VERTICAL);
+        TextView em=txt(p.emoji,32,TEXT,true);em.setGravity(Gravity.CENTER);em.setBackground(round(0xFFF0EFF6,15));top.addView(em,new LinearLayout.LayoutParams(dp(76),dp(76)));
+        LinearLayout info=new LinearLayout(this);info.setOrientation(1);info.setPadding(dp(10),0,dp(3),0);
+        info.addView(txt(p.name,14,TEXT,true));info.addView(txt("Демонстрационный каталог",9,MUTED,false));
+        top.addView(info,new LinearLayout.LayoutParams(0,-2,1));
+        TextView fav=txt(isFav(p)?"♥":"♡",23,isFav(p)?0xFFFF7799:MUTED,true);top.addView(fav);fav.setOnClickListener(v->{toggleFav(p);home();});card.addView(top);
+        LinearLayout price=new LinearLayout(this);price.setGravity(Gravity.CENTER_VERTICAL);price.setPadding(dp(12),dp(10),dp(12),dp(10));price.setBackground(round(0xFF1B1B39,12));
+        LinearLayout labels=new LinearLayout(this);labels.setOrientation(1);labels.addView(txt("Пример цены",9,MUTED,false));labels.addView(txt(money(p.min()),19,TEXT,true));
+        price.addView(labels,new LinearLayout.LayoutParams(0,-2,1));price.addView(txt("НЕ ОФЕРТА",9,GOLD,true));LinearLayout.LayoutParams pp=new LinearLayout.LayoutParams(-1,-2);pp.setMargins(0,dp(10),0,dp(8));card.addView(price,pp);
+        TextView more=action("Подробнее  →",PURPLE);card.addView(more);card.setOnClickListener(v->detail(p));more.setOnClickListener(v->detail(p));
+    }
+
+'''
+s=s[:start]+card+s[end:]
+old='''        int spread=Math.max(p.p1,Math.max(p.p2,p.p3))-p.min();
+        String advice=spread>p.min()*0.08?"В демо-примере разброс цен заметный. Перед покупкой сравни доставку, наличие и продавца.":"В демо-примере цены близки. Выбирай по надёжности магазина и условиям доставки.";
+        content.addView(note("Предварительный совет — не прогноз", advice+" Все указанные здесь цены демонстрационные."));
+'''
+new='''        content.addView(note("Демонстрационная цена","Это пример оформления, а не предложение магазина и не результат сравнения. Реальные цены появятся в карточках после импорта подтверждённых предложений."));
+'''
+if old in s:s=s.replace(old,new,1)
+java.write_text(s,encoding='utf-8')
