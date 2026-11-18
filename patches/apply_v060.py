@@ -65,8 +65,7 @@ _SMARTBUY_FEED_IMPORT_STATE = {
     "detail": "Автоимпорт ожидает запуска backend.",
 }
 
-@app.on_event("startup")
-async def _smartbuy_pampadu_startup_import():
+async def _smartbuy_pampadu_import_worker():
     if _smartbuy_os.getenv("PAMPADU_AUTO_IMPORT_ON_STARTUP", "false").strip().lower() != "true":
         return
     import logging
@@ -105,7 +104,8 @@ async def _smartbuy_pampadu_startup_import():
                 raise RuntimeError("Неизвестный обязательный параметр импортера: " + parameter.name)
         result = refresh(*args, **kwargs)
         if _smartbuy_inspect.isawaitable(result):
-            result = await result
+            import asyncio as _smartbuy_asyncio
+            result = await _smartbuy_asyncio.wait_for(result, timeout=55)
         _SMARTBUY_FEED_IMPORT_STATE["status"] = "completed"
         _SMARTBUY_FEED_IMPORT_STATE["detail"] = (
             str(result)[:800] if result is not None
@@ -158,3 +158,26 @@ async def _smartbuy_log_import_diagnostics():
 '''
     main.write_text(source, encoding="utf-8")
 print("Added token-free startup diagnostics for the Pampadu importer.")
+
+# Keep application startup responsive: run feed refresh in a managed background task.
+main = Path("backend/app/main.py")
+source = main.read_text(encoding="utf-8")
+background_marker = "# SMART_BUY_AI_PAMPADU_BACKGROUND_STARTUP"
+if background_marker not in source:
+    source += r"""
+
+# SMART_BUY_AI_PAMPADU_BACKGROUND_STARTUP
+_SMARTBUY_IMPORT_TASK = None
+
+@app.on_event("startup")
+async def _smartbuy_pampadu_startup_import():
+    import asyncio as _smartbuy_asyncio
+    import os as _smartbuy_background_os
+    global _SMARTBUY_IMPORT_TASK
+    if _smartbuy_background_os.getenv("PAMPADU_AUTO_IMPORT_ON_STARTUP", "false").strip().lower() != "true":
+        return
+    _SMARTBUY_IMPORT_TASK = _smartbuy_asyncio.create_task(_smartbuy_pampadu_import_worker())
+    logging.getLogger("smartbuy.feed_import").info("SMART BUY AI Pampadu import queued in background.")
+"""
+    main.write_text(source, encoding="utf-8")
+print("Moved Pampadu import out of blocking startup and added a 55-second async timeout.")
