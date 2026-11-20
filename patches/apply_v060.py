@@ -23,6 +23,7 @@ def _smartbuy_add_pampadu_feeds():
         ("dogeat", "PAMPADU_DOGEAT_FEED_URL"),
         ("ekonika", "PAMPADU_EKONIKA_FEED_URL"),
         ("koleso", "PAMPADU_KOLESO_FEED_URL"),
+        ("thomas_munz", "PAMPADU_THOMAS_MUNZ_FEED_URL"),
     )
     for source_id, env_name in env_sources:
         url = os.environ.get(env_name, "").strip()
